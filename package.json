@@ -1,0 +1,29 @@
+{
+  "name": "schedulere-maestro",
+  "version": "0.1.0",
+  "description": "Daemon, scheduler api",
+  "main": "run.py",
+  "scripts": {
+    "celery": "celery -A app.celery worker -E --loglevel=info",
+    "flower": "flower -A app.celery",
+    "save": "pip freeze -l > requirements.txt ",
+    "test": "python -m unittest discover",
+    "package": "docker build -t scheduler-maestro ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maestro-server/discovery-api.git"
+  },
+  "keywords": [
+    "flask",
+    "python",
+    "celery",
+    "maestro"
+  ],
+  "author": "Felipe Signorini",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maestro-server/discovery-api/issues"
+  },
+  "homepage": "https://github.com/maestro-server/discovery-api#readme"
+}
