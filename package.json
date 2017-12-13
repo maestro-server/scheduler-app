@@ -4,7 +4,7 @@
   "description": "Daemon, scheduler api",
   "main": "run.py",
   "scripts": {
-    "celery": "celery -A app.celery worker -E --loglevel=info",
+    "celery": "celery -A app.celery worker -E --hostname=scheduler@%h --loglevel=info",
     "flower": "flower -A app.celery",
     "save": "pip freeze -l > requirements.txt ",
     "test": "python -m unittest discover",
