@@ -1,27 +1,38 @@
 
-import os
+import os, requests, json
 from app import celery
-from app.repository import Connections
+from app.libs.url import FactoryURL
+from urllib.parse import urlencode, quote_plus
+
+from .request import task_request
 
 @celery.task(name="scheduler.scan", bind=True)
-def task_scan(self, uri, type, skip = 0):
+def task_scan(self, uri, type, page = 1):
 
-    limit = os.environ.get("MAESTRO_SCAN_QTD", 400)
-    filter = {
+    task_id = None
+    process = 'process.%s.state' % type
+    query = json.dumps({
         'status': 'enabled',
         'active': True,
-        'process.server-list.state': {'$ne': 'danger'}
+        process: {'$ne': 'danger'}
+    })
+
+    params = {
+        'query': query,
+        'limit': os.environ.get("MAESTRO_SCAN_QTD", 50),
+        'page': page
     }
 
-    Conn = Connections()
+    url_values = urlencode(params, quote_via=quote_plus)
+    path = FactoryURL.make(path="connections?%s" % url_values)
+    resource = requests.get(path)
+    result = resource.json()
 
-    result = {
-        'found': Conn.count(filter),
-        'limit': limit,
-        'skip': skip,
-        'items': Conn.getAll(filter, limit, skip)
-    }
-    print("ok", result)
+    if 'items' in result:
+        task_id = task_request.delay(result['items'], uri)
 
-    Conn.dropConn()
-    return result
+    if page < result['total_pages']:
+        pp = result['page'] + 1
+        task_scan.delay(uri, type, pp)
+
+    return {'request_id': task_id}
