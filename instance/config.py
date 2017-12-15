@@ -18,6 +18,7 @@ class Config(object):
     DATABASE_NAME = os.environ.get("MAESTRO_MONGO_DATABASE", "maestro")
     RESTFUL_JSON = {'cls': DateTimeEncoder}
     CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", 'amqp://localhost')
+    CELERY_DEFAULT_QUEUE = 'scheduler'
 
 class ProductionConfig(Config):
     pass
