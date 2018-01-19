@@ -16,4 +16,4 @@ COPY run.py $APP_PATH/run.py
 
 RUN pip3 install -r requirements.txt
 
-CMD celery -A app.celery worker -l info
+CMD celery -A app.celery worker -B -Q scheduler
