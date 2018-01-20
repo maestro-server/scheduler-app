@@ -11,6 +11,6 @@ jobs:
       script:
         - docker build -f Dockerfile -t scheduler-maestro .
         - docker images
-        - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
         - docker tag scheduler-maestro $DOCKER_USER/scheduler-maestro:latest
         - docker push $DOCKER_USER/scheduler-maestro:latest
