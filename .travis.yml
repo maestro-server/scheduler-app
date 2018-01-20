@@ -4,28 +4,13 @@ python:
 services:
   - mongodb
   - docker
-install:
-  - pip install -r requirements.txt
 jobs:
   include:
-    - stage: unit test
-      script:
-      - python -m unittest discover
-
-    - stage: build docker image - celery (base)
-      if: branch != master
-      script:
-        - docker build -f Dockerfile -t scheduler-maestro .
-      after_success:
-        - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-        - docker tag scheduler-maestro $DOCKER_USER/scheduler-maestro:$TRAVIS_BRANCH
-        - docker push $DOCKER_USER/scheduler-maestro:$TRAVIS_BRANCH
-
     - stage: build docker image - celery (latest)
       if: branch = master
       script:
         - docker build -f Dockerfile -t scheduler-maestro .
-      after_success:
+        - docker images
         - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
         - docker tag scheduler-maestro $DOCKER_USER/scheduler-maestro:latest
         - docker push $DOCKER_USER/scheduler-maestro:latest
