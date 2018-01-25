@@ -15,4 +15,4 @@ COPY package.json package.json
 
 RUN pip3 install -r requirements.txt
 
-CMD celery -A app.celery worker -B -Q scheduler
+CMD celery -A app.celery worker -B -Q scheduler --info
