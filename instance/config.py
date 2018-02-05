@@ -15,7 +15,7 @@ class Config(object):
     TESTING = os.environ.get("TESTING", False)
 
     DATABASE_URI = "mongodb://" + os.environ.get("MAESTRO_MONGO_URI", "localhost")
-    DATABASE_NAME = os.environ.get("MAESTRO_MONGO_DATABASE", "maestro")
+    DATABASE_NAME = os.environ.get("MAESTRO_MONGO_DATABASE", "maestro-client")
     RESTFUL_JSON = {'cls': DateTimeEncoder}
     CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", 'amqp://localhost')
 
