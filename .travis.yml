@@ -1,6 +1,9 @@
 language: python
 python:
   - "3.6"
+services:
+  - mongodb
+  - docker
 install:
   - pip install -r requirements.txt
 jobs:
@@ -9,20 +12,20 @@ jobs:
       script:
       - python -m unittest discover
 
+  include:
     - stage: build docker image - celery (base)
       if: branch != master
       script:
-        - docker build -f Dockerfile -t $REPO_CELERY .
-      after_success:
-        - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-        - docker tag $REPO_CELERY $DOCKER_USER/$REPO_CELERY:$TRAVIS_BRANCH
-        - docker push $DOCKER_USER/$REPO_CELERY:$TRAVIS_BRANCH
+        - docker build -f Dockerfile -t $REPO .
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - docker tag $REPO $DOCKER_USER/$REPO:$TRAVIS_BRANCH
+        - docker push $DOCKER_USER/$REPO:$TRAVIS_BRANCH
+
 
     - stage: build docker image - celery (latest)
       if: branch = master
       script:
-        - docker build -f Dockerfile -t $REPO_CELERY .
-      after_success:
-        - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
-        - docker tag $REPO_CELERY $DOCKER_USER/$REPO_CELERY:latest
-        - docker push $DOCKER_USER/$REPO_CELERY:latest
+        - docker build -f Dockerfile -t $REPO .
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - docker tag $REPO $DOCKER_USER/$REPO:latest
+        - docker push $DOCKER_USER/$REPO:latest

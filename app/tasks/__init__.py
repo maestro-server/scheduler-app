@@ -1,3 +1,3 @@
 from .scan import task_scan
 from .request import task_request
-from .notification import task_notification
+from .notify_event import task_notify_event

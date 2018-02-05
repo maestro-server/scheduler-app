@@ -6,10 +6,10 @@ from urllib.parse import urlencode, quote_plus
 
 from .request import task_request
 
-@celery.task(name="scheduler.scan", bind=True)
-def task_scan(self, uri, type, page = 1):
+@celery.task(name="scheduler.scan")
+def task_scan(type, page = 1):
 
-    task_id = None
+    task_id = []
     process = 'process.%s.state' % type
     query = json.dumps({
         'status': 'enabled',
@@ -26,13 +26,17 @@ def task_scan(self, uri, type, page = 1):
     url_values = urlencode(params, quote_via=quote_plus)
     path = FactoryURL.make(path="connections?%s" % url_values)
     resource = requests.get(path)
-    result = resource.json()
 
-    if 'items' in result:
-        task_id = task_request.delay(result['items'], uri)
+    if resource.status_code == 200:
+        result = resource.json()
 
-    if page < result['total_pages']:
-        pp = result['page'] + 1
-        task_scan.delay(uri, type, pp)
+        if 'items' in result:
+            for item in result['items']:
+                tid = task_request.delay(item, type)
+                task_id.append(tid)
 
-    return {'request_id': task_id}
+        if page < result['total_pages']:
+            pp = result['page'] + 1
+            task_scan.delay(type, pp)
+
+        return {'type': type, 'count': len(task_id), 'task_id': task_id}

@@ -12,8 +12,7 @@ COPY ./app $APP_PATH/app
 COPY ./instance $APP_PATH/instance
 COPY requirements.txt requirements.txt
 COPY package.json package.json
-COPY run.py $APP_PATH/run.py
 
 RUN pip3 install -r requirements.txt
 
-CMD celery -A app.celery worker -l info
+CMD celery -A app.celery worker -B -Q scheduler --loglevel=info
