@@ -4,13 +4,14 @@ from app import celery
 from app.libs.url import FactoryURL
 
 @celery.task(name="scheduler.notify", bind=True)
-def task_notify_event(self, msg, roles, context = 'scheduler'):
+def task_notify_event(self, msg, roles, context = 'scheduler', status = 'info'):
 
     post = {
         'body': [{
             'msg': msg,
             'context': context,
             'roles': roles,
+            'status': status,
             'active': True
         }]
     }

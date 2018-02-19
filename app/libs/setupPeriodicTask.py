@@ -8,11 +8,10 @@ def setup_periodic():
     data = Sch.getAll()
 
     for item in data:
-        print(item['name'])
         celery.conf.beat_schedule = {
             'add-every-30-seconds': {
                 'task': 'scheduler.scan',
-                'schedule': 5,
+                'schedule': int(item['time']),
                 'args': (item['name'],)
             },
         }
