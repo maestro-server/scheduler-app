@@ -74,6 +74,8 @@ docs/_build/
 
 # celery beat schedule file
 celerybeat-schedule
+celerybeatmongo.schedulers.MongoScheduler
+app.schedulers.MongoScheduler
 
 # SageMath parsed files
 *.sage.py

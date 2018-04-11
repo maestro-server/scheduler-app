@@ -20,6 +20,10 @@ class Config(object):
     CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", 'amqp://localhost')
     CELERY_DEFAULT_QUEUE = 'scheduler'
 
+    CELERY_MONGODB_SCHEDULER_DB = os.environ.get("MAESTRO_MONGO_SCHEDULER", 'maestro-scheduler')
+    CELERY_MONGODB_SCHEDULER_COLLECTION = "schedules"
+    CELERY_MONGODB_SCHEDULER_URL = "mongodb://" + os.environ.get("MAESTRO_MONGO_URI", "localhost")
+
 class ProductionConfig(Config):
     pass
 
