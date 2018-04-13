@@ -4,8 +4,8 @@
   "description": "Daemon, scheduler api",
   "main": "run.py",
   "scripts": {
-    "celery": "celery -A app.celery beat -Q scheduler -S app.schedulers.MongoScheduler",
-    "debug": "celery -A app.celery worker -B -S app.schedulers.MongoScheduler --loglevel=info",
+    "beat": "celery -A app.celery beat -S app.schedulers.MongoScheduler --loglevel=info",
+    "worker": "celery -A app.celery worker --loglevel=info",
     "save": "pip freeze -l > requirements.txt ",
     "test": "python -m unittest discover",
     "package": "docker build -t scheduler-maestro ."

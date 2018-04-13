@@ -23,6 +23,7 @@ class Config(object):
     CELERY_MONGODB_SCHEDULER_DB = os.environ.get("MAESTRO_MONGO_SCHEDULER", 'maestro-scheduler')
     CELERY_MONGODB_SCHEDULER_COLLECTION = "schedules"
     CELERY_MONGODB_SCHEDULER_URL = "mongodb://" + os.environ.get("MAESTRO_MONGO_URI", "localhost")
+    BROKER_POOL_LIMIT = None
 
 class ProductionConfig(Config):
     pass
