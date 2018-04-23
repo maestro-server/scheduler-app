@@ -106,3 +106,5 @@ ENV/
 /Scripts
 /Lib
 /tcl
+
+node_modules/

@@ -11,10 +11,10 @@ import celery.schedules
 
 
 def get_periodic_task_collection():
-    if hasattr(current_app.conf, "CELERY_MONGODB_SCHEDULER_COLLECTION") \
-            and current_app.conf.CELERY_MONGODB_SCHEDULER_COLLECTION:
-        return current_app.conf.CELERY_MONGODB_SCHEDULER_COLLECTION
-    return "schedules"
+    if hasattr(current_app.conf, "MAESTRO_MONGO_COLLECTION") \
+            and current_app.conf.MAESTRO_MONGO_COLLECTION:
+        return current_app.conf.MAESTRO_MONGO_COLLECTION
+    return "schedulers"
 
 
 #: Authorized values for PeriodicTask.Interval.period

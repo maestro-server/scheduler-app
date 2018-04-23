@@ -3,7 +3,6 @@ import datetime
 import json
 from bson import ObjectId
 
-
 class DateTimeEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, ObjectId):

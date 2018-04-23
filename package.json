@@ -1,5 +1,5 @@
 {
-  "name": "schedulere-maestro",
+  "name": "scheduler-maestro",
   "version": "0.2.0",
   "description": "Daemon, scheduler api",
   "main": "run.py",
