@@ -8,6 +8,8 @@ from celery.beat import Scheduler, ScheduleEntry
 from celery.utils.log import get_logger
 from celery import current_app
 
+from app.libs.forceUpdate import ForceUpdate
+
 class MongoScheduleEntry(ScheduleEntry):
     def __init__(self, task):
         self._task = task
@@ -86,6 +88,9 @@ class MongoScheduleEntry(ScheduleEntry):
         if self.last_run_at and self._task.last_run_at and self.last_run_at > self._task.last_run_at:
             self._task.last_run_at = self.last_run_at
         self._task.run_immediately = False
+
+        self._task.name = ForceUpdate.deserialize(self._task.name)
+
         try:
             self._task.save(save_condition={})
         except Exception:

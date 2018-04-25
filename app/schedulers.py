@@ -9,6 +9,7 @@ import datetime
 
 from celery.beat import Scheduler
 from app.libs.mongo_scheduler_entry import MongoScheduleEntry
+from app.libs.forceUpdate import ForceUpdate
 from app.repository.models import PeriodicTask
 from celery.utils.log import get_logger
 from celery import current_app
@@ -59,6 +60,7 @@ class MongoScheduler(Scheduler):
         self.sync()
         d = {}
         for doc in self.Model.objects(enabled=True, active=True):
+            doc.name = ForceUpdate.serialize(doc)
             d[doc.name] = self.Entry(doc)
         return d
 

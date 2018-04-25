@@ -89,6 +89,7 @@ class PeriodicTask(DynamicDocument):
     enabled = BooleanField(default=False)
 
     last_run_at = DateTimeField()
+    updated_at = DateTimeField()
 
     total_run_count = IntField(min_value=0, default=0)
     max_run_count = IntField(min_value=0, default=0)
