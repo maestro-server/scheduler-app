@@ -25,7 +25,7 @@ jobs:
     - stage: build docker image - celery (latest)
       if: branch = master
       script:
-        - docker build -f Dockerfile -t $REPO .
+        - docker build -f DockerfileWorker -t $REPO_CELERY .
         - docker login -u $DOCKER_USER -p $DOCKER_PASS
-        - docker tag $REPO $DOCKER_USER/$REPO:latest
-        - docker push $DOCKER_USER/$REPO:latest
+        - docker tag $REPO_CELERY $DOCKER_USER/$REPO_CELERY:latest
+        - docker push $DOCKER_USER/$REPO_CELERY:latest
