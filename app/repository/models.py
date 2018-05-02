@@ -72,6 +72,7 @@ class PeriodicTask(DynamicDocument):
 
     name = StringField(required=True)
     task = StringField(required=True)
+    _cls = StringField(required=True)
 
     interval = EmbeddedDocumentField(Interval)
     crontab = EmbeddedDocumentField(Crontab)
