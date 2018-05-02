@@ -25,10 +25,10 @@ class PeriodicTask(DynamicDocument):
     """mongo database model that represents a periodic task"""
 
     meta = {'collection': get_periodic_task_collection(),
-            'allow_inheritance': False}
+            'allow_inheritance': True}
 
     class Interval(EmbeddedDocument):
-        meta = {'allow_inheritance': False}
+        meta = {'allow_inheritance': True}
 
         every = IntField(min_value=0, default=0, required=True)
         period = StringField(choices=PERIODS)
@@ -47,7 +47,7 @@ class PeriodicTask(DynamicDocument):
             return 'every {0.every} {0.period}'.format(self)
 
     class Crontab(EmbeddedDocument):
-        meta = {'allow_inheritance': False}
+        meta = {'allow_inheritance': True}
 
         minute = StringField(default='*', required=True)
         hour = StringField(default='*', required=True)
@@ -70,7 +70,7 @@ class PeriodicTask(DynamicDocument):
                 rfield(self.day_of_month), rfield(self.month_of_year),
             )
 
-    name = StringField(required=True)
+    name = StringField(unique=True)
     task = StringField(required=True)
 
     interval = EmbeddedDocumentField(Interval)
