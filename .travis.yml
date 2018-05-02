@@ -12,20 +12,38 @@ jobs:
       script:
       - python -m unittest discover
 
-  include:
+     - stage: build docker image - flask (base)
+      if: branch != master
+      script:
+        - docker build -f Dockerfile -t $REPO_FLASK .
+      after_success:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - docker tag $REPO_FLASK $DOCKER_USER/$REPO_FLASK:$TRAVIS_BRANCH
+        - docker push $DOCKER_USER/$REPO_FLASK:$TRAVIS_BRANCH
+
     - stage: build docker image - celery (base)
       if: branch != master
       script:
-        - docker build -f Dockerfile -t $REPO .
+        - docker build -f DockerfileCelery -t $REPO_CELERY .
+      after_success:
         - docker login -u $DOCKER_USER -p $DOCKER_PASS
-        - docker tag $REPO $DOCKER_USER/$REPO:$TRAVIS_BRANCH
-        - docker push $DOCKER_USER/$REPO:$TRAVIS_BRANCH
+        - docker tag $REPO_CELERY $DOCKER_USER/$REPO_CELERY:$TRAVIS_BRANCH
+        - docker push $DOCKER_USER/$REPO_CELERY:$TRAVIS_BRANCH
 
+    - stage: build docker image - flask (latest)
+      if: branch = master
+      script:
+        - docker build -f Dockerfile -t $REPO_FLASK .
+      after_success:
+        - docker login -u $DOCKER_USER -p $DOCKER_PASS
+        - docker tag $REPO_FLASK $DOCKER_USER/$REPO_FLASK:latest
+        - docker push $DOCKER_USER/$REPO_FLASK:latest
 
     - stage: build docker image - celery (latest)
       if: branch = master
       script:
-        - docker build -f DockerfileWorker -t $REPO_CELERY .
+        - docker build -f DockerfileCelery -t $REPO_CELERY .
+      after_success:
         - docker login -u $DOCKER_USER -p $DOCKER_PASS
         - docker tag $REPO_CELERY $DOCKER_USER/$REPO_CELERY:latest
         - docker push $DOCKER_USER/$REPO_CELERY:latest
