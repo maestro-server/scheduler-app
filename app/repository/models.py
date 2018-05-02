@@ -28,7 +28,7 @@ class PeriodicTask(DynamicDocument):
             'allow_inheritance': True}
 
     class Interval(EmbeddedDocument):
-        meta = {'allow_inheritance': True}
+        meta = {'allow_inheritance': False}
 
         every = IntField(min_value=0, default=0, required=True)
         period = StringField(choices=PERIODS)
@@ -47,7 +47,7 @@ class PeriodicTask(DynamicDocument):
             return 'every {0.every} {0.period}'.format(self)
 
     class Crontab(EmbeddedDocument):
-        meta = {'allow_inheritance': True}
+        meta = {'allow_inheritance': False}
 
         minute = StringField(default='*', required=True)
         hour = StringField(default='*', required=True)
@@ -72,7 +72,6 @@ class PeriodicTask(DynamicDocument):
 
     name = StringField(required=True)
     task = StringField(required=True)
-    _cls = StringField(required=True)
 
     interval = EmbeddedDocumentField(Interval)
     crontab = EmbeddedDocumentField(Crontab)
