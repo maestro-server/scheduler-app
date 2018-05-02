@@ -25,7 +25,7 @@ class PeriodicTask(DynamicDocument):
     """mongo database model that represents a periodic task"""
 
     meta = {'collection': get_periodic_task_collection(),
-            'allow_inheritance': True}
+            'allow_inheritance': False}
 
     class Interval(EmbeddedDocument):
         meta = {'allow_inheritance': False}
