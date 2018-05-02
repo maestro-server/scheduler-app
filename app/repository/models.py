@@ -70,7 +70,7 @@ class PeriodicTask(DynamicDocument):
                 rfield(self.day_of_month), rfield(self.month_of_year),
             )
 
-    name = StringField()
+    name = StringField(required=True)
     task = StringField(required=True)
 
     interval = EmbeddedDocumentField(Interval)
