@@ -11,4 +11,4 @@ COPY package.json package.json
 
 RUN pip3 install -r requirements.txt
 
-CMD celery -A app.celery beat -S app.schedulers.MongoScheduler
+CMD rm -f celerybeat.pid && celery -A app.celery beat -S app.schedulers.MongoScheduler
