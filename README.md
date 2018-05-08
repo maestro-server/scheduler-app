@@ -20,6 +20,8 @@ Scheduler App service to manage and execute jobs
     - Webhook: Call URL request
     - Connections: Call Crawler task
 
+![arch](http://docs.maestroserver.io/en/latest/_images/scheduler.png)
+
 **Core API, organized by modules:**
 
 * Celery Beat (Mongo Scheduler)
@@ -71,9 +73,12 @@ cd devtools/
 docker-compose up -d
 ```
 
-Configure rabbitmq service in .env file
+Configure rabbitmq, data layer app in .env file
 
 ```bash
+MAESTRO_DATA_URI=http://data:5000
+MAESTRO_MONGO_URI=localhost
+MAESTRO_MONGO_DATABASE=maestro-client
 CELERY_BROKER_URL="amqp://localhost:5672"
 CELERYD_TASK_TIME_LIMIT=30
 ```
