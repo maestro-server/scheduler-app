@@ -8,7 +8,8 @@
     "worker": "celery -A app.celery worker --loglevel=info",
     "save": "pip freeze -l > requirements.txt ",
     "test": "python -m unittest discover",
-    "package-flask": "docker build -t scheduler-maestro ."
+    "package-flask": "docker build -t scheduler-maestro .",
+    "package-celery": "docker build -t scheduler-maestro-celery -f DockerfileCelery ."
   },
   "repository": {
     "type": "git",
