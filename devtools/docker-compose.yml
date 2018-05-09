@@ -1,9 +1,20 @@
 version: '2'
 
 services:
-  rabbitmq:
-    hostname: "discovery-rabbit"
+  scheduler:
+    image: scheduler-maestro
+    environment:
+      - "CELERY_BROKER_URL=amqp://rabbitmq1:5672"
+      - "MAESTRO_MONGO_URI=mongodb"
+      - "MAESTRO_MONGO_DATABASE=maestro-client"
+
+  rabbitmq1:
     image: rabbitmq:3-management
     ports:
       - "15672:15672"
       - "5672:5672"
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
