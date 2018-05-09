@@ -18,5 +18,6 @@ COPY package.json package.json
 ENV PATH "$PATH:/home/app/.local/bin"
 RUN pip3 install -r requirements.txt
 
+
 ENTRYPOINT ["/sbin/tini","-g","--"]
 CMD ["docker-entrypoint-workers.sh"]
