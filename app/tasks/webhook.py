@@ -20,11 +20,11 @@ def task_webhook(name, id, endpoint, method="GET", params={}, chain=[]):
     msg = "Scheduler run - %s" % (name)
     result = ''
     notify_id = None
-    roles = {
+    roles = [{
         "_id": id,
         "refs": "scheduler",
         "role": 5
-    }
+    }]
 
     try:
         resource = requests.request(method, endpoint, data=normalize)
