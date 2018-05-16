@@ -31,7 +31,7 @@ def task_connections(name, id, endpoint, method="GET", params={}, chain=[]):
             webhook_id = task_webhook.delay(name, id, endpoint, method, params, chain)
             return {'webhook_id': webhook_id}
 
-        msg = "Misconfigured connection - %s" % conn_id
+        msg = "Empty results - %s" % conn_id
 
     if resource.status_code in [400, 403, 404, 500, 501, 502, 503]:
         msg = resource.text
