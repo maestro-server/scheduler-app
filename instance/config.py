@@ -16,6 +16,8 @@ class Config(object):
     RESTFUL_JSON = {'cls': DateTimeEncoder}
     CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", 'amqp://localhost')
     CELERY_DEFAULT_QUEUE = 'scheduler'
+    CELERY_TIMEZONE = 'UTC'
+    CELERY_ENABLE_UTC = True
 
     MAESTRO_MONGO_DATABASE = os.environ.get("MAESTRO_MONGO_DATABASE", 'maestro-client')
     MAESTRO_MONGO_COLLECTION = "schedulers"

@@ -1,4 +1,5 @@
 
+import os
 import mongoengine
 import traceback
 import datetime
@@ -52,6 +53,9 @@ class MongoScheduleEntry(ScheduleEntry):
         self._task.last_run_at = self.app.now()
         self._task.total_run_count += 1
         self._task.run_immediately = False
+        self._task.hit = True
+        self._task.no_changes = True
+
         return self.__class__(self._task)
 
     __next__ = next
@@ -65,10 +69,11 @@ class MongoScheduleEntry(ScheduleEntry):
         if hasattr(self._task, 'max_run_count') and self._task.max_run_count:
             if (self._task.total_run_count or 0) >= self._task.max_run_count:
                 return False, 5.0
+
+        print(str(self._task.name) + " -------------imm " + str(self._task.run_immediately))
         if self._task.run_immediately:
-            # figure out when the schedule would run next anyway
-            _, n = self.schedule.is_due(self.last_run_at)
-            return True, n
+            return True, 10
+
         return self.schedule.is_due(self.last_run_at)
 
     def __repr__(self):
@@ -83,17 +88,22 @@ class MongoScheduleEntry(ScheduleEntry):
         return new_entry
 
     def save(self):
-        if self.total_run_count > self._task.total_run_count:
-            self._task.total_run_count = self.total_run_count
-        if self.last_run_at and self._task.last_run_at and self.last_run_at > self._task.last_run_at:
-            self._task.last_run_at = self.last_run_at
-        self._task.run_immediately = False
 
-        self._task.name = ForceUpdate.deserialize(self._task.name)
+        if get(self._task, 'hit', False):
+            if self.total_run_count > self._task.total_run_count:
+                self._task.total_run_count = self.total_run_count
+            if self.last_run_at and self._task.last_run_at and self.last_run_at > self._task.last_run_at:
+                self._task.last_run_at = self.last_run_at
+            self._task.run_immediately = False
+            self._task.hit = False
 
-        try:
-            self._task.save(save_condition={})
-        except Exception:
-            get_logger(__name__).error(traceback.format_exc())
-        except mongoengine.errors.NotUniqueError:
-            pass
+            self._task.name = ForceUpdate.deserialize(self._task.name)
+
+            print("------------------------------------------>   " + str(self._task.name))
+            try:
+                res = self._task.save(save_condition={})
+            except Exception:
+                get_logger(__name__).error(traceback.format_exc())
+            except mongoengine.errors.NotUniqueError:
+                pass
+        pass
