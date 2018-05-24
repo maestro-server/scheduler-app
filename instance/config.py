@@ -22,6 +22,7 @@ class Config(object):
     MAESTRO_MONGO_DATABASE = os.environ.get("MAESTRO_MONGO_DATABASE", 'maestro-client')
     MAESTRO_MONGO_COLLECTION = "schedulers"
     MAESTRO_MONGO_URI = "mongodb://" + os.environ.get("MAESTRO_MONGO_URI", "localhost")
+    MAESTRO_LOOP_TIME = int(os.environ.get("MAESTRO_LOOP_TIME", 10))
 
 class ProductionConfig(Config):
     pass
