@@ -9,6 +9,7 @@ from app.libs.logger import logger
 from app.repository.jobstore.default import jobstores
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
+from datetime import datetime, timedelta
 
 if __name__ == '__main__':
     collection = celery.conf["MAESTRO_MONGO_COLLECTION"]
@@ -21,8 +22,13 @@ if __name__ == '__main__':
         Jobber.tick()
         jobs = Jobber.get_jobs()
         SpawnJobs(jobs).spawn(scheduler)
-    
-    scheduler.add_job(warmup, 'interval', seconds=loop_time)
+
+
+    alarm_time = datetime.now() + timedelta(days=10)
+    #scheduler.add_job(warmup, 'interval', seconds=loop_time)
+
+    scheduler.add_job(warmup, 'date', run_date = alarm_time, id="warmup")
+
 
     scheduler.start()
 

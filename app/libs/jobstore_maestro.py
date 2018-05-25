@@ -27,6 +27,7 @@ class MaestroDBJobStore(BaseJobStore):
 
     Modify for Maestro Bussiness Rules, using flag enabled and active to control the flow.
 
+
     Plugin alias: ``mongodb``
 
     :param str database: database to store jobs in
@@ -36,8 +37,6 @@ class MaestroDBJobStore(BaseJobStore):
     :param int pickle_protocol: pickle protocol level to use (for serialization), defaults to the
         highest available
     """
-
-    __filter_find = {'active': True, 'enabled': True, 'job_state': {'$exists': True }}
 
     def __init__(self, database='apscheduler', collection='jobs', client=None,
                  pickle_protocol=pickle.HIGHEST_PROTOCOL, **connect_args):
@@ -56,6 +55,8 @@ class MaestroDBJobStore(BaseJobStore):
             self.client = MongoClient(**connect_args)
 
         self.collection = self.client[database][collection]
+        self._active = {'active': True, 'enabled': True, 'job_state': {'$exists': True}}
+        self._desactive = {"$set": {'active': False, 'enabled': False}, '$unset': {'job_state': True}}
 
     def start(self, scheduler, alias):
         super(MaestroDBJobStore, self).start(scheduler, alias)
@@ -82,7 +83,7 @@ class MaestroDBJobStore(BaseJobStore):
         return utc_timestamp_to_datetime(document['next_run_time']) if document else None
 
     def get_all_jobs(self):
-        jobs = self._get_jobs(self.__filter_find)
+        jobs = self._get_jobs({})
         self._fix_paused_jobs_sorting(jobs)
         return jobs
 
@@ -96,25 +97,29 @@ class MaestroDBJobStore(BaseJobStore):
                 'job_state': Binary(pickle.dumps(job.__getstate__(), self.pickle_protocol))
             })
         except DuplicateKeyError:
-            logger.warn(" This job already exist - %s", job.id)
+            logger.warning(" This job already exist - %s", job.id)
+            self.update_job(job)
 
     def update_job(self, job):
-        
         changes = {
+            'active': True,
+            'enabled': True,
             'next_run_time': datetime_to_utc_timestamp(job.next_run_time),
             'job_state': Binary(pickle.dumps(job.__getstate__(), self.pickle_protocol))
         }
-        result = self.collection.update_one({'_id': job.id}, {'$set': changes})
+        result = self.collection.update({'_id': job.id}, {'$set': changes})
+        print(result)
+
         if result and result['n'] == 0:
-            raise JobLookupError(job.id)
+            logger.warning(job.id)
 
     def remove_job(self, job_id):
-        self.collection.remove(job_id)
+        result = self.collection.update({'_id': job_id}, self._desactive)
         if result and result['n'] == 0:
             raise JobLookupError(job_id)
 
-    def remove_all_jobs(self, filter = {}):
-        return self.collection.update(filter, {'$set': {'active': False}})
+    def remove_all_jobs(self):
+        self.collection.remove()
 
     def shutdown(self):
         self.client.close()
@@ -130,13 +135,15 @@ class MaestroDBJobStore(BaseJobStore):
     def _get_jobs(self, conditions):
         jobs = []
         failed_job_ids = []
-        merged = {**conditions, **self.__filter_find}
-        for document in self.collection.find({'job_state': {'$exists': True }}, ['_id', 'job_state'], sort=[('next_run_time', ASCENDING)]):
-            logger.error("======================================================================== %s", document)
+
+        merged = {**conditions, **self._active}
+        for document in self.collection.find(merged, ['_id', 'job_state'],
+                                             sort=[('next_run_time', ASCENDING)]):
             try:
                 jobs.append(self._reconstitute_job(document['job_state']))
             except BaseException:
-                self._logger.exception('Unable to restore job "%s" -- removing it', document['_id'])
+                self._logger.exception('Unable to restore job "%s" -- removing it',
+                                       document['_id'])
 
         return jobs
 
