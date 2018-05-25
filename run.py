@@ -2,26 +2,29 @@ from pytz import utc
 import asyncio
 
 from app import celery
+from app.services.jobs import Jobs
+from app.services.spawn import SpawnJobs
+from app.libs.timer import Timer
+from app.libs.logger import logger
+from app.repository.jobstore.default import jobstores
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from app.libs.jobstore_maestro import MaestroDBJobStore
-from app.jobs import Jobs, Timer
+
 
 if __name__ == '__main__':
-    MAESTRO_MONGO_DATABASE = celery.conf["MAESTRO_MONGO_DATABASE"]
-    MAESTRO_MONGO_COLLECTION = celery.conf["MAESTRO_MONGO_COLLECTION"]
-    MAESTRO_MONGO_URI = celery.conf["MAESTRO_MONGO_URI"]
-
-    jobstores = {
-        'default': MaestroDBJobStore(collection=MAESTRO_MONGO_COLLECTION, host=MAESTRO_MONGO_URI, database=MAESTRO_MONGO_DATABASE)
-    }
+    collection = celery.conf["MAESTRO_MONGO_COLLECTION"]
+    loop_time = celery.conf["MAESTRO_LOOP_TIME"]
 
     scheduler = AsyncIOScheduler(timezone=utc, jobstores=jobstores)
-    jobs = Jobs(collection=MAESTRO_MONGO_COLLECTION).delta(Timer('adminer'))
-    print(jobs)
+    Jobber = Jobs(timer=Timer('adminer'), collection=collection)
+
+    def warmup():
+        Jobber.tick()
+        jobs = Jobber.get_jobs()
+        SpawnJobs(jobs).spawn(scheduler)
+    
+    scheduler.add_job(warmup, 'interval', seconds=loop_time)
 
     scheduler.start()
-
-    print("===> running scheduler")
 
     try:
         asyncio.get_event_loop().run_forever()

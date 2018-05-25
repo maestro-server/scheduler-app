@@ -1,5 +1,6 @@
 
 import pymongo
+from app.libs.logger import logger
 from pymongo import MongoClient
 from app import celery
 
@@ -8,6 +9,6 @@ db = client[celery.conf['MAESTRO_MONGO_DATABASE']]
 
 try:
     client.server_info()  # Forces a call.
-    print("Mongo Online")
+    logger.info("Mongo Online")
 except pymongo.errors.ServerSelectionTimeoutError as err:
-    print("==================================> MongoDB is down", err)
+    logger.error("MongoDB is down [%s]", err)
