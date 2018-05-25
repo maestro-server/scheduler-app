@@ -11,11 +11,12 @@ class Timer(Model, metaclass=Singleton):
 
     def timer(self):
         result = self.findOne(self.__filter)
-        return get(result, 'warmup', self.getNow())
+        default = self.getNow() - timedelta(days=60)
+        return get(result, 'warmup', default)
 
     def updateTime(self):
         datet = {'warmup': self.getNow()}
         return self.update(self.__filter, datet)
 
     def getNow(self):
-        return datetime.datetime.now() - timedelta(days=60)
+        return datetime.datetime.now()

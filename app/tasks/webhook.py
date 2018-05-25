@@ -15,13 +15,13 @@ def call_chains(chain):
 
 
 @celery.task(name="webhook")
-def task_webhook(name, id, endpoint, method="GET", params={}, chain=[]):
+def task_webhook(name, _id, endpoint, method="GET", params={}, chain=[]):
     normalize = from_pairs(map_(params, lambda i: [i['key'], i['value']]))
     msg = "Scheduler run - %s" % (name)
     result = ''
     notify_id = None
     roles = [{
-        "_id": id,
+        "_id": _id,
         "refs": "scheduler",
         "role": 5
     }]
@@ -29,7 +29,7 @@ def task_webhook(name, id, endpoint, method="GET", params={}, chain=[]):
     try:
         resource = requests.request(method, endpoint, data=normalize)
     except requests.exceptions.RequestException as error:
-        deple_id = task_deplete.delay(str(error), id)
+        deple_id = task_deplete.delay(str(error), _id)
         return {'msg': result, 'deple_id': deple_id}
 
 

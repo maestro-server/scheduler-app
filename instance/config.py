@@ -17,12 +17,13 @@ class Config(object):
     CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL", 'amqp://localhost')
     CELERY_DEFAULT_QUEUE = 'scheduler'
     CELERY_TIMEZONE = 'UTC'
-    CELERY_ENABLE_UTC = True
 
-    MAESTRO_MONGO_DATABASE = os.environ.get("MAESTRO_MONGO_DATABASE", 'maestro-client')
-    MAESTRO_MONGO_COLLECTION = "schedulers"
+    MAESTRO_MONGO_COLLECTION_TIMER = os.environ.get("MAESTRO_MONGO_COLLECTION_TIMER", "schedulers_timer")
+    MAESTRO_MONGO_COLLECTION = os.environ.get("MAESTRO_MONGO_COLLECTION", "schedulers_control")
+
+    MAESTRO_MONGO_DATABASE = os.environ.get("MAESTRO_MONGO_DATABASE", 'maestro-scheduler')
     MAESTRO_MONGO_URI = "mongodb://" + os.environ.get("MAESTRO_MONGO_URI", "localhost")
-    MAESTRO_LOOP_TIME = int(os.environ.get("MAESTRO_LOOP_TIME", 2))
+    MAESTRO_LOOP_TIME = int(os.environ.get("MAESTRO_LOOP_TIME", 10))
 
 class ProductionConfig(Config):
     pass
