@@ -4,7 +4,7 @@
   "description": "Daemon, scheduler api",
   "main": "run.py",
   "scripts": {
-    "beat": "celery -A app.celery beat -S app.schedulers.MongoScheduler --loglevel=info",
+    "beat": "python run.py",
     "worker": "celery -A app.celery worker --loglevel=info",
     "save": "pip freeze -l > requirements.txt ",
     "test": "python -m unittest discover",

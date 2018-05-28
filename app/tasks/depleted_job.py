@@ -13,6 +13,7 @@ def task_deplete(msg, job_id):
         'body': [{
             '_id': job_id,
             'msg': msg,
+            'crawling': True,
             'enabled': False
         }]
     }
