@@ -1,11 +1,7 @@
-
 import unittest
 
-class BasicTests(unittest.TestCase):
-    ############################
-    #### setup and teardown ####
-    ############################
 
+class BasicTests(unittest.TestCase):
     def test_main_page(self):
         self.assertEqual(200, 200)
 

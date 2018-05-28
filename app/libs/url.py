@@ -1,8 +1,7 @@
-
 import os
 
-class FactoryURL(object):
 
+class FactoryURL(object):
     @staticmethod
     def make(path=""):
         base = os.environ.get("MAESTRO_DATA_URI", "http://localhost:5010")

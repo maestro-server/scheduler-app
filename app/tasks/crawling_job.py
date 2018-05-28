@@ -2,8 +2,6 @@ import requests
 from app import celery
 from app.libs.url import FactoryURL
 
-from .notify_event import task_notify_event
-
 
 @celery.task(name="crawling")
 def task_crawling(ids):

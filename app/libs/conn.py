@@ -1,8 +1,7 @@
-
 import pymongo
-from app.libs.logger import logger
-from pymongo import MongoClient
 from app import celery
+from pymongo import MongoClient
+from app.libs.logger import logger
 
 client = MongoClient(celery.conf['MAESTRO_MONGO_URI'], serverSelectionTimeoutMS=1)
 db = client[celery.conf['MAESTRO_MONGO_DATABASE']]

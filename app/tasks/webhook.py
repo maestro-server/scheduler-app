@@ -1,11 +1,10 @@
-
 import requests
-from pydash import has, get, from_pairs, map_
+from pydash import get, from_pairs, map_
 
 from app import celery
-from .notify_event import task_notify_event
-from .depleted_job import task_deplete
-from .chain import task_chain
+from app.tasks.notify_event import task_notify_event
+from app.tasks.depleted_job import task_deplete
+from app.tasks.chain import task_chain
 
 
 def call_chains(chain):

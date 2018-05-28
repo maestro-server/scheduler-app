@@ -1,5 +1,5 @@
-
 from app import celery
+
 
 @celery.task(name="chain_exec")
 def task_chain_exec(task, args):

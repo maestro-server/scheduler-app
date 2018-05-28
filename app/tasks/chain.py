@@ -1,13 +1,13 @@
-
-import requests, json
+import requests
+import json
 from pydash import get, has
 from app import celery
 from app.libs.url import FactoryURL
+from app.tasks.chain_exec import task_chain_exec
 
-from .chain_exec import task_chain_exec
 
 @celery.task(name="chain")
-def task_chain(id, countdown = 0):
+def task_chain(id, countdown=0):
     post = json.dumps({
         '_id': id,
         'enabled': True,
@@ -22,12 +22,12 @@ def task_chain(id, countdown = 0):
 
         if has(task, 'task'):
             args = [
-                        get(task, 'name'),
-                        get(task, '_id'),
-                        get(task, 'endpoint'),
-                        get(task, 'method', 'GET'),
-                        get(task, 'args', []),
-                        get(task, 'chain', [])]
+                get(task, 'name'),
+                get(task, '_id'),
+                get(task, 'endpoint'),
+                get(task, 'method', 'GET'),
+                get(task, 'args', []),
+                get(task, 'chain', [])]
 
             task_chain_exec.apply_async((get(task, 'task'), args), countdown=countdown)
 

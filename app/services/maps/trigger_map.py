@@ -1,5 +1,4 @@
 
-
 from pydash import get
 from app.services.maps.trigger_interval_map import TriggerIntervalMap
 
@@ -23,7 +22,3 @@ class TriggerMap(object):
 
     def get_map(self):
         return self.__map
-
-
-
-

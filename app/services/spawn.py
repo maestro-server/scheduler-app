@@ -1,8 +1,6 @@
 
-
 import random
 from pydash import get, pick
-
 from app.libs.logger import logger
 from app.repository.singleton import Singleton
 from app.services.maps.spawn_map import SpawnMap
@@ -66,5 +64,3 @@ class SpawnJobs(object, metaclass=Singleton):
             task_id = tasks[task].delay(**args)
             counter_id = task_counter.delay(_id=get(args, '_id'))
             logger.info('Scheduler: Task executed %s (%s)', task_id, counter_id)
-        
-

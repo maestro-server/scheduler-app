@@ -1,13 +1,12 @@
-
 import requests
 
 from app import celery
 from app.libs.logger import logger
 from app.libs.url import FactoryURL
 
+
 @celery.task(name="counter")
 def task_counter(_id):
-
     if not _id:
         logger.error("Scheduler: [TASK Counter] Missing ID", _id)
         return
@@ -30,4 +29,3 @@ def task_counter(_id):
         logger.error("Scheduler: [TASK Counter] %s", msg)
 
     return {'statuc_code': result.status_code}
-

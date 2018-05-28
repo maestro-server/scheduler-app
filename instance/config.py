@@ -10,6 +10,7 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
+
 class Config(object):
     TESTING = os.environ.get("TESTING", False)
 
@@ -24,11 +25,14 @@ class Config(object):
     MAESTRO_MONGO_URI = "mongodb://" + os.environ.get("MAESTRO_MONGO_URI", "localhost")
     MAESTRO_LOOP_TIME = int(os.environ.get("MAESTRO_LOOP_TIME", 10))
 
+
 class ProductionConfig(Config):
     pass
 
+
 class DevelopmentConfig(Config):
     DEBUG = True
+
 
 class TestingConfig(Config):
     TESTING = True
