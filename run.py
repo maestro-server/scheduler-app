@@ -10,7 +10,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 if __name__ == '__main__':
     loop_time = celery.conf["MAESTRO_LOOP_TIME"]
 
-    scheduler = AsyncIOScheduler(timezone=utc, jobstores=jobstores)
+    scheduler = AsyncIOScheduler(timezone=utc, jobstores=jobstores, misfire_grace_time=15)
     Jobber = Jobs()
 
 

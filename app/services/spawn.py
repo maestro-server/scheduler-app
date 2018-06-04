@@ -21,16 +21,17 @@ class SpawnJobs(object, metaclass=Singleton):
                     logger.info('Scheduler: Create Job [%s]', str(jobs))
                 else:
                     self.update(id, scheduler, sjob, SpawnJobs.is_disabled(spawn))
-                    logger.info('Scheduler: Uodate Job [%s]', id)
+                    logger.info('Scheduler: Update Job [%s]', id)
 
                 if get(spawn, 'run_immediately', False):
                     self.run_now(id, scheduler, sjob, SpawnJobs.is_disabled(spawn))
+                    logger.info('--------------->>>>>> Scheduler: Run immediaty [%s]', get(spawn, 'name'))
 
                 logger.info('Scheduler: Crawler Job [%s]', get(spawn, 'name'))
 
     def create(self, id, scheduler, sjob, removed=False):
-        if not removed:
-            sjob['misfire_grace_time'] = 5
+        if removed:
+            sjob['misfire_grace_time'] = 15
             return scheduler.add_job(SpawnJobs.caller, id=id, **sjob)
 
     def update(self, id, scheduler, sjob, removed=False):
@@ -56,7 +57,7 @@ class SpawnJobs(object, metaclass=Singleton):
 
     @staticmethod
     def is_disabled(sjob):
-        return get(sjob, 'enabled', False) or get(sjob, 'active', False)
+        return get(sjob, 'enabled', False) and get(sjob, 'active', False)
 
     @staticmethod
     def caller(task, args):
