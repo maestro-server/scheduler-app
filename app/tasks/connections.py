@@ -1,17 +1,20 @@
+import re
+import requests
+import json
+from urllib.parse import urlencode, quote_plus
 
 from app import celery
-import re, requests, json
 from pydash import get
-from urllib.parse import urlencode, quote_plus
-from .webhook import task_webhook
+
 from app.libs.url import FactoryURL
-from .depleted_job import task_deplete
+from app.tasks.webhook import task_webhook
+from app.tasks.depleted_job import task_deplete
+
 
 @celery.task(name="connections")
 def task_connections(name, _id, endpoint, method="GET", params={}, chain=[]):
-
-    type = re.search(r'\/[a-zA-Z0-9]{24,24}\/([a-z-]*)$', endpoint).group(1)
-    conn_id = re.search(r'\/([a-zA-Z0-9]{24,24})\/', endpoint).group(1)
+    type = re.search(r'/[a-zA-Z0-9]{24,24}/([a-z-]*)$', endpoint).group(1)
+    conn_id = re.search(r'/([a-zA-Z0-9]{24,24})/', endpoint).group(1)
 
     process = 'process.%s.state' % type
     query = json.dumps({
@@ -21,7 +24,6 @@ def task_connections(name, _id, endpoint, method="GET", params={}, chain=[]):
         process: {'$ne': 'danger'}
     })
 
-    post = urlencode({'query': query}, quote_via=quote_plus)
     path = FactoryURL.make(path="connections")
     resource = requests.post(path, json={'query': query})
 

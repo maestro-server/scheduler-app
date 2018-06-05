@@ -1,11 +1,10 @@
-
 import requests
 from app import celery
 from app.libs.url import FactoryURL
 
-@celery.task(name="scheduler.notify")
-def task_notify_event(msg, roles, description='', status = 'info', context = 'scheduler'):
 
+@celery.task(name="scheduler.notify")
+def task_notify_event(msg, roles, description='', status='info', context='scheduler'):
     post = {
         'body': [{
             'msg': msg,
@@ -24,5 +23,3 @@ def task_notify_event(msg, roles, description='', status = 'info', context = 'sc
         return {'status_code': result.status_code, 'post': post}
     except requests.exceptions.RequestException as error:
         return {'error': str(error)}
-
-    

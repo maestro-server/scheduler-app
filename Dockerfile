@@ -14,6 +14,7 @@ COPY ./app $APP_PATH/app
 COPY ./instance $APP_PATH/instance
 COPY requirements.txt requirements.txt
 COPY package.json package.json
+COPY run.py run.py
 
 ENV PATH "$PATH:/home/app/.local/bin"
 RUN pip3 install -r requirements.txt
