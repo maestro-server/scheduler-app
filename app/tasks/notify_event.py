@@ -18,6 +18,11 @@ def task_notify_event(msg, roles, description='', status = 'info', context = 'sc
     }
 
     path = FactoryURL.make(path="events")
-    result = requests.put(path, json=post)
+    
+    try:
+        result = requests.put(path, json=post)
+        return {'status_code': result.status_code, 'post': post}
+    except requests.exceptions.RequestException as error:
+        return {'error': str(error)}
 
-    return {'status_code': result.status_code, 'post': post}
+    
