@@ -1,5 +1,5 @@
 import requests
-from pydash import get, from_pairs, map_
+from pydash import from_pairs, map_
 
 from app import celery
 from app.tasks.notify_event import task_notify_event
@@ -10,7 +10,7 @@ from app.tasks.chain import task_chain
 def call_chains(chain):
     if chain:
         for job in chain:
-            task_chain.delay(get(job, '_id'), get(job, 'countdown'))
+            task_chain.delay(job.get('_id'), job.get('countdown'))
 
 
 @celery.task(name="webhook")

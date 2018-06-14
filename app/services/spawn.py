@@ -1,6 +1,6 @@
 
 import random
-from pydash import get, pick
+from pydash import pick
 from app.libs.logger import logger
 from app.repository.singleton import Singleton
 from app.services.maps.spawn_map import SpawnMap
@@ -11,7 +11,7 @@ class SpawnJobs(object, metaclass=Singleton):
     
     def spawn(self, queue, scheduler):
         for spawn in queue:
-            id = get(spawn, '_id')
+            id = spawn.get('_id')
 
             if id:
                 exist = scheduler.get_job(id)
@@ -23,11 +23,11 @@ class SpawnJobs(object, metaclass=Singleton):
                     self.update(id, scheduler, sjob, SpawnJobs.is_disabled(spawn))
                     logger.info('Scheduler: Update Job [%s]', id)
 
-                if get(spawn, 'run_immediately', False):
+                if spawn.get('run_immediately', False):
                     self.run_now(id, scheduler, sjob, SpawnJobs.is_disabled(spawn))
-                    logger.info('--------------->>>>>> Scheduler: Run immediaty [%s]', get(spawn, 'name'))
+                    logger.info('--------------->>>>>> Scheduler: Run immediaty [%s]', spawn.get('name'))
 
-                logger.info('Scheduler: Crawler Job [%s]', get(spawn, 'name'))
+                logger.info('Scheduler: Crawler Job [%s]', spawn.get('name'))
 
     def create(self, id, scheduler, sjob, removed=False):
         if removed:
@@ -57,7 +57,7 @@ class SpawnJobs(object, metaclass=Singleton):
 
     @staticmethod
     def is_disabled(sjob):
-        return get(sjob, 'enabled', False) and get(sjob, 'active', False)
+        return sjob.get('enabled', False) and sjob.get('active', False)
 
     @staticmethod
     def caller(task, args):
@@ -65,5 +65,5 @@ class SpawnJobs(object, metaclass=Singleton):
 
         if task in tasks:
             task_id = tasks[task].delay(**args)
-            counter_id = task_counter.delay(_id=get(args, '_id'))
+            counter_id = task_counter.delay(_id=args.get('_id'))
             logger.info('Scheduler: Task executed %s (%s)', task_id, counter_id)

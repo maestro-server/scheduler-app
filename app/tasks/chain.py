@@ -22,13 +22,13 @@ def task_chain(id, countdown=0):
 
         if has(task, 'task'):
             args = [
-                get(task, 'name'),
-                get(task, '_id'),
-                get(task, 'endpoint'),
-                get(task, 'method', 'GET'),
-                get(task, 'args', []),
-                get(task, 'chain', [])]
+                task.get('name'),
+                task.get('_id'),
+                task.get('endpoint'),
+                task.get('method', 'GET'),
+                task.get('args', []),
+                task.get('chain', [])]
 
-            task_chain_exec.apply_async((get(task, 'task'), args), countdown=countdown)
+            task_chain_exec.apply_async((task.get('task'), args), countdown=countdown)
 
     return {'status_code': result.status_code}
