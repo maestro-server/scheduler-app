@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/maestro-server/scheduler-app.svg?branch=master)](https://travis-ci.org/maestro-server/scheduler-app)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3a073f54d89d948c0c08/maintainability)](https://codeclimate.com/github/maestro-server/scheduler-app/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/3a073f54d89d948c0c08/test_coverage)](https://codeclimate.com/github/maestro-server/scheduler-app/test_coverage)
+[![Coverage Status](https://coveralls.io/repos/github/maestro-server/scheduler-app/badge.svg?branch=master)](https://coveralls.io/github/maestro-server/scheduler-app?branch=master)
 
 # Maestro Server #
 
