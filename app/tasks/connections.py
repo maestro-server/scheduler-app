@@ -12,10 +12,10 @@ from app.tasks.depleted_job import task_deplete
 
 @celery.task(name="connections")
 def task_connections(name, _id, endpoint, method="GET", params={}, chain=[]):
-    type = re.search(r'/[a-zA-Z0-9]{24,24}/([a-z-]*)$', endpoint).group(1)
+    connType = re.search(r'/[a-zA-Z0-9]{24,24}/([a-z-]*)$', endpoint).group(1)
     conn_id = re.search(r'/([a-zA-Z0-9]{24,24})/', endpoint).group(1)
 
-    process = 'process.%s.state' % type
+    process = 'process.%s.state' % connType
     query = json.dumps({
         '_id': conn_id,
         'status': 'enabled',

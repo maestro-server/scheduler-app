@@ -16,5 +16,4 @@ def task_notify_event(msg, roles, description='', status='info'):
     }
 
     path = FactoryURL.make(path="events")
-    
     return data_request(path, post)

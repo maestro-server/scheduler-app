@@ -13,12 +13,10 @@ if __name__ == '__main__':
     scheduler = AsyncIOScheduler(timezone=utc, jobstores=jobstores, misfire_grace_time=15)
     Jobber = Jobs()
 
-
     def warmup():
         Jobber.tick()
         jobs = Jobber.get_jobs()
         SpawnJobs().spawn(jobs, scheduler)
-
 
     scheduler.start()
 
