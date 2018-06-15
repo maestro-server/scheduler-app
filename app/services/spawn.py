@@ -44,7 +44,7 @@ class SpawnJobs(object, metaclass=Singleton):
         self.create(tempid, scheduler, njob, removed)
 
 
-    def mapp(self, data):
+    def mapp(data):
         return SpawnMap(data)\
             .trigger()\
             .timer()\
