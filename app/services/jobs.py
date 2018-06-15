@@ -1,6 +1,5 @@
 import json
 import requests
-from pydash import get
 from app.libs.logger import logger
 from app.libs.url import FactoryURL
 from app.repository.singleton import Singleton
@@ -19,12 +18,15 @@ class Jobs(object, metaclass=Singleton):
     def sync_jobs(self):
         query = json.dumps({'crawling': True})
 
-        path = FactoryURL.make(path=self.__resource)
-        resource = requests.post(path, json={'query': query})
+        try:
+            path = FactoryURL.make(path=self.__resource)
+            resource = requests.post(path, json={'query': query})
+        except requests.exceptions.ConnectionError as error:
+            return logger.error("Scheduler: Data Layer is down [%s]", str(error))
 
         if resource.status_code == 200:
             result = resource.json()
-            self.__jobs = get(result, 'items', [])
+            self.__jobs = result.get('items', [])
             self.sync_ack()
 
         return self.__jobs
@@ -33,7 +35,7 @@ class Jobs(object, metaclass=Singleton):
         ids = []
 
         for job in self.__jobs:
-            ids.append(get(job, '_id'))
+            ids.append(job.get('_id'))
 
         if len(ids) > 0:
             task_crawling.delay(ids)

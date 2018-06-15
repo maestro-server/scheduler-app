@@ -1,6 +1,4 @@
 
-from pydash import get
-
 class TriggerIntervalMap(object):
 
     def __init__(self, data):
@@ -8,8 +6,8 @@ class TriggerIntervalMap(object):
         self.__data = data
 
     def rules(self):
-        period = get(self.__data, 'period')
-        time = get(self.__data, 'every')
+        period = self.__data.get('period')
+        time = self.__data.get('every')
 
         self.__map = {period: time}
         return self

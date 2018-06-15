@@ -1,6 +1,6 @@
 
 
-from pydash import get, pick
+from pydash import pick
 from app.services.maps.trigger_map import TriggerMap
 
 
@@ -19,18 +19,15 @@ class SpawnMap(object):
         return self
 
     def trigger(self):
-        obj = {'trigger': get(self.__data, 'period_type', 'date')}
+        obj = {'trigger': self.__data.get('period_type', 'date')}
         self.__map.update(obj)
         return self
 
     def args(self):
-        obj = {'args': [get(self.__data, 'task', 'webhook'), pick(self.__data, ['name', '_id', 'endpoint', 'method', 'params', 'chain'])]}
+        obj = {'args': [self.__data.get('task', 'webhook'), pick(self.__data, ['name', '_id', 'endpoint', 'method', 'params', 'chain'])]}
         self.__map.update(obj)
         return self
 
     def get_map(self):
         return self.__map
-
-
-
-
+        

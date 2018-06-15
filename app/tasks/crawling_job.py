@@ -1,6 +1,6 @@
-import requests
 from app import celery
 from app.libs.url import FactoryURL
+from app.libs.data_request import data_request
 
 
 @celery.task(name="crawling")
@@ -20,8 +20,4 @@ def task_crawling(ids):
             'body': body
         }
 
-        try:
-            resource = requests.put(path, json=post)
-            return {'status_code': resource.status_code}
-        except requests.exceptions.RequestException as error:
-            return {'error': str(error)}
+        return data_request(path, post)

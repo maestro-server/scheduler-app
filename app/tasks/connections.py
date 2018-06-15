@@ -4,7 +4,6 @@ import json
 from urllib.parse import urlencode, quote_plus
 
 from app import celery
-from pydash import get
 
 from app.libs.url import FactoryURL
 from app.tasks.webhook import task_webhook
@@ -13,10 +12,10 @@ from app.tasks.depleted_job import task_deplete
 
 @celery.task(name="connections")
 def task_connections(name, _id, endpoint, method="GET", params={}, chain=[]):
-    type = re.search(r'/[a-zA-Z0-9]{24,24}/([a-z-]*)$', endpoint).group(1)
+    connType = re.search(r'/[a-zA-Z0-9]{24,24}/([a-z-]*)$', endpoint).group(1)
     conn_id = re.search(r'/([a-zA-Z0-9]{24,24})/', endpoint).group(1)
 
-    process = 'process.%s.state' % type
+    process = 'process.%s.state' % connType
     query = json.dumps({
         '_id': conn_id,
         'status': 'enabled',
@@ -29,7 +28,7 @@ def task_connections(name, _id, endpoint, method="GET", params={}, chain=[]):
 
     if resource.status_code == 200:
         result = resource.json()
-        if get(result, 'found', 0) == 1:
+        if result.get('found', 0) == 1:
             webhook_id = task_webhook.delay(name, _id, endpoint, method, params, chain)
             return {'webhook_id': webhook_id}
 
