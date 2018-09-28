@@ -25,6 +25,11 @@ class Config(object):
     MAESTRO_MONGO_URI = "mongodb://" + os.environ.get("MAESTRO_MONGO_URI", "localhost")
     MAESTRO_LOOP_TIME = int(os.environ.get("MAESTRO_LOOP_TIME", 10))
 
+    MAESTRO_DISCOVERY_URI = os.environ.get("MAESTRO_DISCOVERY_URI", 'http://localhost:5000')
+    MAESTRO_REPORT_URI = os.environ.get("MAESTRO_REPORT_URI", 'http://localhost:5005')
+    MAESTRO_ANALYTICS_URI = os.environ.get("MAESTRO_ANALYTICS_URI", 'http://localhost:5020')
+    MAESTRO_DATA_URI = os.environ.get("MAESTRO_DATA_URI", 'http://localhost:5010')
+
 
 class ProductionConfig(Config):
     pass

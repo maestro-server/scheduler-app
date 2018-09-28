@@ -111,7 +111,10 @@ npm run worker
 
 | Env Variables                | Example                  | Description                        |
 |------------------------------|--------------------------|------------------------------------|
-| MAESTRO_DATA_URI             | http://localhost:5005    | Data Layer API URL                 |
+| MAESTRO_DATA_URI             | http://localhost:5010    | Data Layer API URL                 |
+| MAESTRO_REPORT_URI           | http://localhost:5005    | Report App URL                     |
+| MAESTRO_DISCOVERY_URI        | http://localhost:5000    | Discovery App URL                  |
+| MAESTRO_ANALYTICS_URI        | http://localhost:5020    | Analytics App URL                  |
 | CELERY_BROKER_URL            | XXXX                     | Rabbitmq URL                       |
 | MAESTRO_MONGO_URI            | localhost                | Mongo URI                          |
 | MAESTRO_MONGO_DATABASE       | maestro-client           | Mongo Database name                |

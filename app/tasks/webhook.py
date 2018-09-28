@@ -5,6 +5,7 @@ from app import celery
 from app.tasks.notify_event import task_notify_event
 from app.tasks.depleted_job import task_deplete
 from app.tasks.chain import task_chain
+from app.libs.url import FactoryURL
 
 
 def call_chains(chain):
@@ -14,7 +15,7 @@ def call_chains(chain):
 
 
 @celery.task(name="webhook")
-def task_webhook(name, _id, endpoint, method="GET", params={}, chain=[]):
+def task_webhook(name, _id, endpoint, source=None, method="GET", params={}, chain=[]):
     normalize = from_pairs(map_(params, lambda i: [i['key'], i['value']]))
     msg = "Scheduler run - %s" % (name)
     result = ''
@@ -26,7 +27,8 @@ def task_webhook(name, _id, endpoint, method="GET", params={}, chain=[]):
     }]
 
     try:
-        resource = requests.request(method, endpoint, data=normalize)
+        full_endpoint = FactoryURL.discovery(source) + endpoint
+        resource = requests.request(method, full_endpoint, data=normalize)
     except requests.exceptions.RequestException as error:
         deple_id = task_deplete.delay(str(error), _id)
         return {'msg': result, 'deple_id': deple_id}

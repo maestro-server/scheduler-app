@@ -25,6 +25,7 @@ def task_chain(id, countdown=0):
                 task.get('name'),
                 task.get('_id'),
                 task.get('endpoint'),
+                task.get('source', ''),
                 task.get('method', 'GET'),
                 task.get('args', []),
                 task.get('chain', [])]
