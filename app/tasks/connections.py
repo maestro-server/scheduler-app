@@ -31,7 +31,7 @@ def task_connections(name, _id, endpoint, source='discovery', method="GET", para
             webhook_id = task_webhook.delay(name, _id, endpoint, source, method, params, chain)
             return {'webhook_id': webhook_id}
 
-        msg = "Empty results - %s" % conn_id
+        msg = "Connection desactived - %s" % conn_id
 
     if resource.status_code in [400, 403, 404, 500, 501, 502, 503]:
         msg = resource.text
