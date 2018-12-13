@@ -28,11 +28,14 @@ def task_webhook(name, _id, endpoint, source=None, method="GET", params={}, chai
 
     try:
         full_endpoint = FactoryURL.discovery(source) + endpoint
+
+        print(method, full_endpoint, normalize)
         resource = requests.request(method, full_endpoint, data=normalize)
     except requests.exceptions.RequestException as error:
         deple_id = task_deplete.delay(str(error), _id)
         return {'msg': result, 'deple_id': deple_id}
 
+    print(resource.text)
     if resource.status_code in [200, 201, 204]:
         result = resource.text
         notify_id = task_notify_event.delay(msg=msg, roles=roles, description=result, status='success')
