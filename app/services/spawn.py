@@ -4,7 +4,7 @@ from pydash import pick
 from app.libs.logger import logger
 from app.repository.singleton import Singleton
 from app.services.maps.spawn_map import SpawnMap
-from app.tasks import task_connections, task_webhook, task_counter
+from app.tasks import task_connections, task_webhook, task_counter, task_reports
 
 
 class SpawnJobs(object, metaclass=Singleton):
@@ -59,9 +59,10 @@ class SpawnJobs(object, metaclass=Singleton):
 
     @staticmethod
     def caller(task, args):
-        tasks = {'connections': task_connections, 'webhook': task_webhook}
+        tasks = {'connections': task_connections, 'webhook': task_webhook, 'reports': task_reports}
 
         if task in tasks:
+
             task_id = tasks[task].delay(**args)
             counter_id = task_counter.delay(_id=args.get('_id'))
             logger.info('Scheduler: Task executed %s (%s)', task_id, counter_id)

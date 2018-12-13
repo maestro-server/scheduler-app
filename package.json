@@ -5,7 +5,7 @@
   "main": "run.py",
   "scripts": {
     "beat": "python run.py",
-    "worker": "celery -A app.celery worker --loglevel=info",
+    "worker": "celery -A app.celery worker -E -Q scheduler --hostname=scheduler@%h --loglevel=info",
     "save": "pip freeze -l > requirements.txt ",
     "test": "python -m unittest discover",
     "package-flask": "docker build -t scheduler-maestro .",
