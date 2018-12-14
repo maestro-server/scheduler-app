@@ -24,7 +24,7 @@ class SpawnMap(object):
         return self
 
     def args(self):
-        obj = {'args': [self.__data.get('task', 'webhook'), pick(self.__data, ['name', '_id', 'endpoint', 'method', 'params', 'chain'])]}
+        obj = {'args': [self.__data.get('task', 'webhook'), pick(self.__data, ['name', '_id', 'endpoint', 'method', 'args', 'chain'])]}
         self.__map.update(obj)
         return self
 

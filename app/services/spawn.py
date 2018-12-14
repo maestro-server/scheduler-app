@@ -62,7 +62,7 @@ class SpawnJobs(object, metaclass=Singleton):
         tasks = {'connections': task_connections, 'webhook': task_webhook, 'reports': task_reports}
 
         if task in tasks:
-
+            
             task_id = tasks[task].delay(**args)
             counter_id = task_counter.delay(_id=args.get('_id'))
             logger.info('Scheduler: Task executed %s (%s)', task_id, counter_id)

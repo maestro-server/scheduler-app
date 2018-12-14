@@ -10,7 +10,7 @@ from app.tasks.depleted_job import task_deplete
 
 
 @celery.task(name="connections")
-def task_connections(name, _id, endpoint, source='discovery', method="GET", params={}, chain=[]):
+def task_connections(name, _id, endpoint, source='discovery', method="GET", args={}, chain=[]):
     connType = re.search(r'/[a-zA-Z0-9]{24,24}/([a-z-]*)$', endpoint).group(1)
     conn_id = re.search(r'/([a-zA-Z0-9]{24,24})/', endpoint).group(1)
 
@@ -28,7 +28,7 @@ def task_connections(name, _id, endpoint, source='discovery', method="GET", para
     if resource.status_code == 200:
         result = resource.json()
         if result.get('found', 0) == 1:
-            webhook_id = task_webhook.delay(name, _id, endpoint, source, method, params, chain)
+            webhook_id = task_webhook.delay(name, _id, endpoint, source, method, args, chain)
             return {'webhook_id': webhook_id}
 
         msg = "Connection desactived - %s" % conn_id
