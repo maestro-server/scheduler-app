@@ -33,13 +33,12 @@ def task_webhook(name, _id, endpoint, source=None, method="GET", args={}, chain=
         deple_id = task_deplete.delay(str(error), _id)
         return {'msg': result, 'deple_id': deple_id}
 
-    print(resource.text)
     if resource.status_code in [200, 201, 204]:
         result = resource.text
         notify_id = task_notify_event.delay(msg=msg, roles=roles, description=result, status='success')
         call_chains(chain)
 
-    if resource.status_code in [400, 403, 404, 500, 501, 502, 503]:
+    if resource.status_code in [400, 403, 404, 405, 500, 501, 502, 503]:
         result = "ERROR %s" % str(resource.text)
         notify_id = task_notify_event.delay(msg=msg, roles=roles, description=result, status='danger')
 
