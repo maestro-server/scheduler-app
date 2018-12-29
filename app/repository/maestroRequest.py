@@ -21,7 +21,9 @@ class MaestroRequest(object):
         return self.__context.status_code
 
     def raiseError(self):
-        if self.get_status() == requests.codes.ok:
+        msg = ''
+
+        if self.get_status() < 400:
             return False
 
         if self.get_status() >= 400:
