@@ -1,11 +1,9 @@
 from app import celery
-from app.libs.url import FactoryURL
-from app.libs.data_request import data_request
+from app.repository.externalMaestroData import ExternalMaestroData
 
 
 @celery.task(name="crawling")
 def task_crawling(ids):
-    path = FactoryURL.make(path="schedulers")
 
     body = []
     for id in ids:
@@ -20,4 +18,6 @@ def task_crawling(ids):
             'body': body
         }
 
-        return data_request(path, post)
+        return ExternalMaestroData() \
+            .put_request(path="schedulers", body=post) \
+            .get_results()

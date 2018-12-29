@@ -4,13 +4,14 @@ import json
 
 from app import celery
 
-from app.libs.url import FactoryURL
 from app.tasks.webhook import task_webhook
 from app.tasks.depleted_job import task_deplete
+from app.repository.externalMaestroScheduler import ExternalMaestroScheduler
 
 
 @celery.task(name="connections")
 def task_connections(name, _id, endpoint, source='discovery', method="GET", args={}, chain=[]):
+    msg = "Task Connection - %s" % _id
 
     try:
         connType = re.search(r'/[a-zA-Z0-9]{24,24}/([a-z-]*)$', endpoint).group(1)
@@ -28,19 +29,18 @@ def task_connections(name, _id, endpoint, source='discovery', method="GET", args
         process: {'$ne': 'danger'}
     })
 
-    path = FactoryURL.make(path="connections")
-    resource = requests.post(path, json={'query': query})
+    resource = ExternalMaestroScheduler(_id) \
+        .post_request(path="connections", body={'query': query})
 
-    if resource.status_code == 200:
-        result = resource.json()
+    if resource.get_status() >= 400:
+        msg = resource.get_error()
+        task_deplete.delay(msg, _id)
+
+    if resource.get_status() < 400:
+        result = resource.get_results()
+        msg = "Connection success - %s" % conn_id
         if result.get('found', 0) == 1:
             webhook_id = task_webhook.delay(name, _id, endpoint, source, method, args, chain)
             return {'webhook_id': webhook_id}
 
-        msg = "Connection desactived - %s" % conn_id
-
-    if resource.status_code in [400, 403, 404, 500, 501, 502, 503]:
-        msg = resource.text
-
-    deple_id = task_deplete.delay(msg, _id)
-    return {'deplete_id': deple_id, 'status_code': resource.status_code}
+    return {'msg': msg, 'status_code': resource.get_status()}

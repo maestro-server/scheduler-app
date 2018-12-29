@@ -1,9 +1,8 @@
 import json
-import requests
 from app.libs.logger import logger
-from app.libs.url import FactoryURL
 from app.repository.singleton import Singleton
 from app.tasks.crawling_job import task_crawling
+from app.repository.externalMaestroData import ExternalMaestroData
 
 
 class Jobs(object, metaclass=Singleton):
@@ -18,14 +17,11 @@ class Jobs(object, metaclass=Singleton):
     def sync_jobs(self):
         query = json.dumps({'crawling': True})
 
-        try:
-            path = FactoryURL.make(path=self.__resource)
-            resource = requests.post(path, json={'query': query})
-        except requests.exceptions.ConnectionError as error:
-            return logger.error("Scheduler: Data Layer is down [%s]", str(error))
+        result = ExternalMaestroData() \
+            .post_request(path=self.__resource, body={'query': query}) \
+            .get_results()
 
-        if resource.status_code == 200:
-            result = resource.json()
+        if result:
             self.__jobs = result.get('items', [])
             self.sync_ack()
 

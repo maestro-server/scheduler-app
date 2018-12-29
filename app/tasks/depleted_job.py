@@ -1,13 +1,12 @@
+
 from app import celery
-from app.libs.url import FactoryURL
-from app.libs.data_request import data_request
+from app.repository.externalMaestroData import ExternalMaestroData
 
 
 @celery.task(name="deplete")
 def task_deplete(msg, job_id):
-    path = FactoryURL.make(path="schedulers")
 
-    post = {
+    body = {
         'body': [{
             '_id': job_id,
             'msg': msg,
@@ -16,4 +15,6 @@ def task_deplete(msg, job_id):
         }]
     }
 
-    return data_request(path, post)
+    return ExternalMaestroData() \
+        .put_request(path="schedulers", body=body) \
+        .get_results()

@@ -2,7 +2,7 @@ import requests
 
 from app import celery
 from app.libs.logger import logger
-from app.libs.url import FactoryURL
+from app.repository.externalMaestroData import ExternalMaestroData
 
 
 @celery.task(name="counter")
@@ -18,14 +18,10 @@ def task_counter(_id):
         }]
     }
 
-    path = FactoryURL.make(path="schedulers")
-    result = requests.put(path, json=post)
+    result = ExternalMaestroData() \
+        .put_request(path="schedulers", body=post)
 
-    if result.status_code in [200, 201, 204]:
+    if result:
         logger.debug("TASK Counter Success")
 
-    if result.status_code in [400, 403, 404, 500, 501, 502, 503]:
-        msg = "ERROR %s" % str(result.text)
-        logger.error("Scheduler: [TASK Counter] %s", msg)
-
-    return {'statuc_code': result.status_code}
+    return {'statuc_code': result.get_status()}

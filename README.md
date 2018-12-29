@@ -34,7 +34,7 @@ Scheduler App service to manage and execute jobs
 * Worker - Notify Event
 
 ## TechStack ##
-* Python <3.4
+* Python <3.6
 * Celery
 * RabbitMq
 * MongoDB
@@ -109,15 +109,20 @@ npm run worker
 
 ### Env variables ###
 
-| Env Variables                | Example                  | Description                        |
-|------------------------------|--------------------------|------------------------------------|
-| MAESTRO_DATA_URI             | http://localhost:5010    | Data Layer API URL                 |
-| MAESTRO_REPORT_URI           | http://localhost:5005    | Report App URL                     |
-| MAESTRO_DISCOVERY_URI        | http://localhost:5000    | Discovery App URL                  |
-| MAESTRO_ANALYTICS_URI        | http://localhost:5020    | Analytics App URL                  |
-| CELERY_BROKER_URL            | XXXX                     | Rabbitmq URL                       |
-| MAESTRO_MONGO_URI            | localhost                | Mongo URI                          |
-| MAESTRO_MONGO_DATABASE       | maestro-client           | Mongo Database name                |
+| Env Variables                | Example                  | Description                                 |
+|------------------------------|--------------------------|---------------------------------------------|
+| MAESTRO_DATA_URI             | http://localhost:5010    | Data Layer API URL                          |
+| MAESTRO_REPORT_URI           | http://localhost:5005    | Report App URL                              |
+| MAESTRO_DISCOVERY_URI        | http://localhost:5000    | Discovery App URL                           |
+| MAESTRO_ANALYTICS_URI        | http://localhost:5020    | Analytics App URL                           |
+| CELERY_BROKER_URL            | XXXX                     | Rabbitmq URL                                |
+| MAESTRO_MONGO_URI            | localhost                | Mongo URI                                   |
+| MAESTRO_MONGO_DATABASE       | maestro-client           | Mongo Database name                         |
+|                              |                          |                                             |
+| MAESTRO_SECRETJWT_PRIVATE    | XXX                      | Secret Key - JWT private connections        |        |
+| MAESTRO_NOAUTH               | XXX                      | Secret Pass to validate private connections |               |
+
+		
 
 
 ### Contribute ###

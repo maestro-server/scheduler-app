@@ -30,6 +30,9 @@ class Config(object):
     MAESTRO_ANALYTICS_URI = os.environ.get("MAESTRO_ANALYTICS_URI", 'http://localhost:5020')
     MAESTRO_DATA_URI = os.environ.get("MAESTRO_DATA_URI", 'http://localhost:5010')
 
+    SECRETJWT_PRIVATE = os.environ.get("MAESTRO_SECRETJWT_PRIVATE", "defaultSecretKeyPrivate")
+    NOAUTH = os.environ.get("MAESTRO_NOAUTH", "defaultSecretNoAuthToken")
+
 
 class ProductionConfig(Config):
     pass

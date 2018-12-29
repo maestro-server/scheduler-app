@@ -1,10 +1,10 @@
 from app import celery
-from app.libs.url import FactoryURL
-from app.libs.data_request import data_request
+from app.repository.externalMaestroData import ExternalMaestroData
 
 @celery.task(name="scheduler.notify")
 def task_notify_event(msg, roles, description='', status='info'):
-    post = {
+
+    body = {
         'body': [{
             'msg': msg,
             'context': 'scheduler',
@@ -15,5 +15,6 @@ def task_notify_event(msg, roles, description='', status='info'):
         }]
     }
 
-    path = FactoryURL.make(path="events")
-    return data_request(path, post)
+    return ExternalMaestroData() \
+        .put_request(path="events", body=body) \
+        .get_results()

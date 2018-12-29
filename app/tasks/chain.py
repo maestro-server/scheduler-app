@@ -1,10 +1,9 @@
-import requests
-import json
-from pydash import get, has
-from app import celery
-from app.libs.url import FactoryURL
-from app.tasks.chain_exec import task_chain_exec
 
+import json
+from pydash import has
+from app import celery
+from app.tasks.chain_exec import task_chain_exec
+from app.repository.externalMaestroScheduler import ExternalMaestroScheduler
 
 @celery.task(name="chain")
 def task_chain(id, countdown=0):
@@ -14,12 +13,12 @@ def task_chain(id, countdown=0):
         'active': True
     })
 
-    path = FactoryURL.make(path="schedulers")
-    result = requests.post(path, json={'query': post})
+    result = ExternalMaestroScheduler(id) \
+        .post_request(path="schedulers", body={'query': post}) \
+        .get_results('items')
 
-    if result.status_code == 200:
-        task = get(result.json(), 'items[0]')
-
+    if result:
+        task = result[0]
         if has(task, 'task'):
             args = [
                 task.get('name'),
@@ -32,4 +31,4 @@ def task_chain(id, countdown=0):
 
             task_chain_exec.apply_async((task.get('task'), args), countdown=countdown)
 
-    return {'status_code': result.status_code}
+    return {'id': id}
