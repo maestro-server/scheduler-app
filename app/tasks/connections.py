@@ -38,9 +38,13 @@ def task_connections(name, _id, endpoint, source='discovery', method="GET", args
 
     if resource.get_status() < 400:
         result = resource.get_results()
-        msg = "Connection success - %s" % conn_id
+
         if result.get('found', 0) == 1:
             webhook_id = task_webhook.delay(name, _id, endpoint, source, method, args, chain)
             return {'webhook_id': webhook_id}
+
+        else:
+            msg = "Connection issue - %s" % conn_id
+            task_deplete.delay(msg, _id)
 
     return {'msg': msg, 'status_code': resource.get_status()}
