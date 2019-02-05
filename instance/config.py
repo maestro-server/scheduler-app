@@ -22,7 +22,7 @@ class Config(object):
     MAESTRO_MONGO_COLLECTION = os.environ.get("MAESTRO_MONGO_COLLECTION", "schedulers_control")
 
     MAESTRO_MONGO_DATABASE = os.environ.get("MAESTRO_MONGO_DATABASE", 'maestro-scheduler')
-    MAESTRO_MONGO_URI = "mongodb://" + os.environ.get("MAESTRO_MONGO_URI", "localhost")
+    MAESTRO_MONGO_URI = os.environ.get("MAESTRO_MONGO_URI", "mongodb://localhost")
     MAESTRO_LOOP_TIME = int(os.environ.get("MAESTRO_LOOP_TIME", 10))
 
     MAESTRO_DISCOVERY_URI = os.environ.get("MAESTRO_DISCOVERY_URI", 'http://localhost:5000')

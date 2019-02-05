@@ -55,7 +55,7 @@ services:
         environment:
         - "MAESTRO_DATA_URI=http://data:5000"
         - "CELERY_BROKER_URL=amqp://rabbitmq:5672"
-        - "MAESTRO_MONGO_URI=localhost"
+        - "MAESTRO_MONGO_URI=mongodb://localhost"
         - "MAESTRO_MONGO_DATABASE=maestro-client"
 
     scheduler:
@@ -63,7 +63,7 @@ services:
         environment:
         - "MAESTRO_DATA_URI=http://data:5000"
         - "CELERY_BROKER_URL=amqp://rabbitmq:5672"
-        - "MAESTRO_MONGO_URI=localhost"
+        - "MAESTRO_MONGO_URI=mongodb://localhost"
         - "MAESTRO_MONGO_DATABASE=maestro-client"
 ```
 
@@ -78,7 +78,7 @@ Configure rabbitmq, data layer app in .env file
 
 ```bash
 MAESTRO_DATA_URI=http://data:5000
-MAESTRO_MONGO_URI=localhost
+MAESTRO_MONGO_URI=mongodb://localhost
 MAESTRO_MONGO_DATABASE=maestro-client
 CELERY_BROKER_URL="amqp://localhost:5672"
 CELERYD_TASK_TIME_LIMIT=30
@@ -116,11 +116,11 @@ npm run worker
 | MAESTRO_DISCOVERY_URI        | http://localhost:5000    | Discovery App URL                           |
 | MAESTRO_ANALYTICS_URI        | http://localhost:5020    | Analytics App URL                           |
 | CELERY_BROKER_URL            | XXXX                     | Rabbitmq URL                                |
-| MAESTRO_MONGO_URI            | localhost                | Mongo URI                                   |
+| MAESTRO_MONGO_URI            | mongodb://localhost      | Mongo URI                                   |
 | MAESTRO_MONGO_DATABASE       | maestro-client           | Mongo Database name                         |
 |                              |                          |                                             |
-| MAESTRO_SECRETJWT_PRIVATE    | XXX                      | Secret Key - JWT private connections        |        |
-| MAESTRO_NOAUTH               | XXX                      | Secret Pass to validate private connections |               |
+| MAESTRO_SECRETJWT_PRIVATE    | XXX                      | Secret Key - JWT private connections        |
+| MAESTRO_NOAUTH               | XXX                      | Secret Pass to validate private connections |
 
 		
 
