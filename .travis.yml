@@ -1,6 +1,10 @@
 language: python
 python:
   - "3.6"
+addons:
+  apt:
+    packages:
+      - libgnutls28-dev
 services:
   - mongodb
   - docker
