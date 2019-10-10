@@ -4,7 +4,7 @@ python:
 addons:
   apt:
     packages:
-      - libgnutls28-dev
+      - libgnutls-dev
 services:
   - mongodb
   - docker
