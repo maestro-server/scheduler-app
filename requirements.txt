@@ -1,3 +1,4 @@
+dnspython==1.16.0
 APScheduler==3.6.3
 boto3==1.12.32
 celery==4.4.2
