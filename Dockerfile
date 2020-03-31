@@ -1,21 +1,30 @@
-FROM maestroserver/maestro-python-gcc
+FROM maestroserver/maestro-python-gcc AS compile-gcc
 
-ENV APP_PATH=/opt/application
-ENV PATH "$PATH:/home/app/.local/bin"
-WORKDIR $APP_PATH
+ENV PYTHONDONTWRITEBYTECODE=1
+WORKDIR /opt/application
+
+RUN python3 -m venv /home/app/venv
+ENV PATH="/home/app/venv/bin:$PATH"
+
+COPY requirements.txt requirements.txt
+RUN pip3 install --upgrade pip && \
+    pip3 install --no-cache-dir -r requirements.txt
+
+
+# production image
+FROM python:3.8-slim
+RUN useradd --create-home app
+
+COPY --from=compile-gcc /home/app/venv /home/app/venv
+
+ENV PATH="/home/app/venv/bin:$PATH"
+
+WORKDIR /home/app
+USER app
 
 COPY ./app app/
 COPY ./instance instance/
-COPY requirements.txt requirements.txt
 COPY package.json package.json
 COPY run.py run.py
-COPY docker-entrypoint.sh /usr/local/bin/
 
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
-RUN addgroup app && adduser -S app
-RUN pip3 install --upgrade pip
-RUN pip3 install -r requirements.txt
-
-
-ENTRYPOINT ["/sbin/tini","-g","--"]
-CMD ["docker-entrypoint.sh"]
+CMD ["python", "run.py"]
