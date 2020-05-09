@@ -13,17 +13,19 @@ To test out the demo, [Demo Online](http://demo.maestroserver.io "Demo Online")
 
 # Maestro Server - Scheduler #
 
-Scheduler App service to manage and execute jobs
+Scheduler App is accountable to manage and execute internal jobs.
 
-- Schedule jobs, interval or crontab
-- Requests chain jobs
-- Modules
-    - Webhook: Call URL request
-    - Connections: Call Crawler task
+* Schedule jobs, interval or crontab
+* Do chain jobs
+
+----------
+
+Scheduler use apscheduler to control scheduler jobs, `Apscheduler documentation <https://apscheduler.readthedocs.io/en/latest/>`_
+
 
 ![arch](http://docs.maestroserver.io/en/latest/_images/scheduler.png)
 
-**Core API, organized by modules:**
+**Core API:**
 
 * Celery Beat (Mongo Scheduler)
 * Worker - Webhook
@@ -39,7 +41,7 @@ Scheduler App service to manage and execute jobs
 * RabbitMq
 * MongoDB
 
-## Service relations ##
+## Connect to: ##
 * Maestro Data
 
 ## Setup #
