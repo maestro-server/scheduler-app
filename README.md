@@ -1,5 +1,5 @@
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/70223d33e20d4ed59ea4e310dc38260d)](https://www.codacy.com/app/maestro/scheduler-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=maestro-server/scheduler-app&amp;utm_campaign=Badge_Grade)
-[![Build Status](https://travis-ci.org/maestro-server/scheduler-app.svg?branch=master)](https://travis-ci.org/maestro-server/scheduler-app)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/f4df72c5fbde4b59a1f7de0d9b2899dc)](https://www.codacy.com/gh/maestro-server/scheduler-app/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=maestro-server/scheduler-app&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.com/maestro-server/scheduler-app.svg?branch=master)](https://travis-ci.com/maestro-server/scheduler-app)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3a073f54d89d948c0c08/maintainability)](https://codeclimate.com/github/maestro-server/scheduler-app/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/3a073f54d89d948c0c08/test_coverage)](https://codeclimate.com/github/maestro-server/scheduler-app/test_coverage)
 [![Coverage Status](https://coveralls.io/repos/github/maestro-server/scheduler-app/badge.svg?branch=master)](https://coveralls.io/github/maestro-server/scheduler-app?branch=master)
