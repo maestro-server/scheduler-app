@@ -1,7 +1,7 @@
 dnspython==1.16.0
 APScheduler==3.6.3
 boto3==1.12.32
-celery==4.4.2
+celery==5.2.2
 Flask==1.1.1
 Flask-APScheduler==1.11.0
 Flask-RESTful==0.3.8
